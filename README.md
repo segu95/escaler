@@ -4,15 +4,24 @@ Preparación de un ampliador de imágenes para `upscaler.segutools.store`, con
 procesamiento externo mediante Replicate Crystal Upscaler y RunningHub.
 
 **Para continuar en otro chat, leer primero [docs/CONTINUIDAD.md](docs/CONTINUIDAD.md).**
-Incluye el contexto, la infraestructura, los hallazgos, las autorizaciones y el
-bloqueo de acceso remoto. La prioridad vigente es revisar el VPS en modo lectura.
+Incluye el estado vigente, la infraestructura y los pendientes. La revisión del
+VPS ya se completó. La prioridad es configurar la nueva clave de RunningHub en
+un formulario seguro y validar una prueba 4K; el primer envío fue rechazado
+por saldo insuficiente. No hay despliegue autorizado.
 
 ## Estado
 
-Este repositorio contiene análisis, workflows candidatos y un ejecutor de
-pruebas. Todavía no contiene una aplicación web terminada ni desplegada.
-No se han realizado ejecuciones autenticadas de IA ni se ha accedido al VPS por SSH.
-Los presets 4K/6K/8K requieren pruebas de dimensiones, calidad y costo en RunningHub.
+Este repositorio contiene una primera aplicación web para pruebas privadas,
+análisis, workflows candidatos y un ejecutor de pruebas. La interfaz permite
+cargar imágenes y elegir 4K/6K/8K; el backend integra el envío y seguimiento con
+RunningHub. Todavía no está desplegada ni validada con una ejecución real de IA.
+
+Para iniciar la vista previa y configurar el piloto, leer
+[Aplicación web](docs/aplicacion-web.md).
+
+Se completó una [revisión del VPS por SSH, solo de lectura](docs/revision-vps-2026-11-05.md).
+No se instaló ni desplegó el upscaler. Los presets requieren pruebas de dimensiones,
+calidad y costo con la cuenta del proveedor.
 
 ## Archivos principales
 
@@ -28,7 +37,7 @@ Los presets 4K/6K/8K requieren pruebas de dimensiones, calidad y costo en Runnin
 
 ## Validación local
 
-Python 3.10 o superior, sin dependencias adicionales:
+Python 3.10 o superior; instalar primero `requirements.txt` para las pruebas web:
 
 ```bash
 python3 -m unittest discover -s tests -v

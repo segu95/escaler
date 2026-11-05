@@ -4,6 +4,118 @@ Estado al 5 de noviembre de 2026. Idioma del usuario: español. Zona: America/Li
 Este documento resume trabajo realizado, evidencia y pendientes; no reemplaza
 las instrucciones nuevas del usuario ni las políticas del siguiente entorno.
 
+## Estado vigente para el siguiente chat — entrega a GitHub
+
+El usuario autorizó expresamente subir el código y la memoria a GitHub, rama
+`main`, para continuar sin descargar un ZIP. Esa autorización se refiere al
+repositorio: no autoriza desplegar ni modificar servicios del VPS.
+Leer primero esta sección; los apartados inferiores conservan la historia.
+
+- Existe un piloto web privado en `web/`, con 18 pruebas locales aprobadas.
+  No se ha desplegado y no hay un resultado de IA exitoso todavía.
+- Workflow elegido por el usuario: `1995790546771783682`. No cambiarlo por
+  `2118434176885411841`, la copia que aparecía en una captura.
+- Una única solicitud real 4K fue rechazada con `errorCode=605` y taskId vacío.
+  La subida sí devolvió fileName. No hubo reintentos ni resultado descargable.
+- La cuenta mostraba RHcoins 100 y Wallet Balance 0. La clave `escaler` estaba
+  en Enterprise-Shared, cuya pantalla indica facturación en dólares y Recharge
+  Wallet. `Limit($)=9999` era un límite de gasto, no saldo.
+- El usuario indica que dispone de otra clave Consumer-Membership y quiere
+  sustituir la anterior en `RUNNINGHUB_API_KEY`. No ha podido introducirla aún.
+  Verificar condiciones, saldo y compatibilidad de esa modalidad; no asumir
+  que los 100 RHcoins permiten el workflow ni que basta cambiar la clave.
+- El campo secreto está limitado al destino HTTPS `www.runninghub.ai`.
+  La clave anterior fue declarada ready por el entorno; no pedirla ni mostrarla.
+- El borrador del chat anterior rechaza modificaciones con `draft_not_editable`.
+  El usuario no ve «Editar entorno» y tampoco dispone de terminal visible.
+  No repetir instrucciones de terminal interactiva ni inventar botones de UI.
+  Preparar el requisito del secreto mediante las herramientas de configuración
+  en una nueva sesión de configuración editable; su valor se introduce en el
+  formulario seguro, nunca como mensaje. No reutilizar IDs del entorno anterior.
+- La aplicación requiere además una clave privada propia del estudio si se
+  habilita acceso a su API; es distinta de la API key del proveedor.
+- No asumir que las credenciales, archivos ignorados o claves SSH sobreviven.
+  Este repositorio no contiene secretos, bases de tareas, respuestas privadas
+  ni originales/resultados de las pruebas.
+
+Imagen suministrada por el usuario para UNA prueba 4K (ilustración navideña,
+478×641 px, no es el diseño Nitro enviado inicialmente):
+
+https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR3MxMFAWZ6f8Mzu3vlEbie1sbGpDGNBYIxoIfSHuYe-g&s=10
+
+Próximo paso: resolver el campo seguro de la nueva API key, verificar la modalidad
+Consumer-Membership y el saldo aplicable, y solo entonces continuar la prueba
+única acordada, registrando el ID externo antes de consultar. No comprar saldo.
+No duplicar envíos ambiguos. La revisión del VPS ya se completó y permanece
+limitada a lectura; conservar separados el proyecto existente y el nuevo upscaler.
+
+## Prueba real: envío rechazado por saldo insuficiente
+
+El usuario aportó un enlace de Google a una ilustración «¡Feliz Navidad!» de
+478×641 px (distinta de la imagen Nitro inicialmente adjunta). Se descargó en
+`run-output/navidad-source.jpg`. La subida a RunningHub devolvió fileName y se
+intentó UNA ejecución 4K del workflow original `1995790546771783682`.
+RunningHub respondió errorCode 605, saldo insuficiente, con taskId vacío.
+No existe resultado ni ID confirmado. No se reintentó. El reporte saneado está
+en `run-output/navidad-4k-first/report.json`; la respuesta privada está fuera de
+Git. El journal conservador registra submission_unconfirmed; el error explícito
+605 explica el rechazo. No presentar el envío como una ampliación completada.
+La captura previa mostraba RHcoins 100 y Wallet Balance 0. La respuesta actual
+confirma saldo insuficiente para esta solicitud; no se verificó tarifa ni importe
+mínimo de recarga. Siguiente paso: el propietario comprueba/recarga el saldo API
+y avisa para reintentar una sola vez. No comprar saldo ni reenviar automáticamente.
+
+## Actualización: credencial disponible en el entorno
+
+RUNNINGHUB_API_KEY está presente y el runtime la declara ready con observaciones
+actuales, limitada al destino HTTPS www.runninghub.ai. Se comprobó POST /query
+con un ID inexistente y válido sintácticamente: respuesta 1004, Task not found.
+Esto confirma respuesta del endpoint con la configuración actual; no demuestra
+permisos para ejecutar el workflow, saldo suficiente ni calidad. No se crearon
+tareas ni se hicieron ampliaciones. Falta una imagen propia aportada por el usuario
+para la prueba 4K. No solicitar ni mostrar el valor de la credencial.
+
+## Confirmación del workflow al retomar el entorno
+
+El usuario confirmó continuar con el workflow original `1995790546771783682`,
+no con la copia `2118434176885411841` mostrada en su captura. En el nuevo entorno
+se conservaron los archivos y pasaron las 18 pruebas locales. La credencial
+RUNNINGHUB_API_KEY sigue ausente; no se han ejecutado trabajos reales.
+
+## Actualización: preparada la prueba con credenciales
+
+Se añadieron `tools/start_web.py` (entrada oculta, puerto local configurable) y
+`tools/reconcile_web_task.py` (vincular una tarea incierta a un ID externo verificado,
+sin reenviar). Hay 18 pruebas locales correctas. RUNNINGHUB_API_KEY sigue ausente:
+no se enviaron ejecuciones reales. La clave se introduce en terminal, no por chat.
+Consultar la guía web para arrancar en 8021 junto a la vista previa en 8020.
+
+## Actualización: primera web local preparada
+
+A petición del usuario se creó un piloto web ligero: `web/`, `requirements.txt`,
+`.env.example` y `tests/test_web.py`. Ver [guía web](aplicacion-web.md).
+Incluye carga y vista previa, 4K/6K/8K, autenticación privada, journal SQLite,
+envío único a RunningHub, seguimiento y enlace de resultado. 14 pruebas locales
+pasaron, más comprobaciones de navegador en escritorio/móvil. No hubo trabajos
+facturables, despliegues ni cambios de servicios. La integración real sigue
+pendiente de credenciales y de validar los presets. Esta actualización sustituye
+el estado histórico de ausencia de aplicación que se conserva más abajo.
+
+## Actualización: acceso SSH y revisión completados
+
+El 5 de noviembre de 2026, aproximadamente a las 14:29 America/Lima, se accedió
+por SSH a Serversegu y se completó la revisión de solo lectura. Ver
+[revisión del VPS](revision-vps-2026-11-05.md) para evidencia, recursos y propuesta
+independiente. Esta actualización sustituye las referencias históricas de abajo
+que indicaban que nunca se había entrado o que el transporte seguía bloqueado.
+
+La privada anterior no estaba disponible. Se generó otra fuera del repositorio;
+el propietario autorizó su pública y la autenticación funcionó. Se verificó la
+huella registrada. No se modificaron servicios ni se desplegó la aplicación.
+El puerto 8020 está libre en la medición; no existe un virtual host upscaler.
+RAM disponible: 176 MiB; disco libre: 2,3 GB; sin swap. La capacidad de producción
+no está demostrada. Los detalles anteriores del VPS se conservan como historia.
+
 ## Objetivo y autorización vigente
 
 El usuario quiere reproducir las funciones de Designmarket Upscaler en

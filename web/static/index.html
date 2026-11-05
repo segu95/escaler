@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="es">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>SEGUTOOLS — Upscaler</title><link rel="stylesheet" href="/static/style.css"><script defer src="/static/app.js"></script></head>
+<body>
+<header><a class="brand" href="/">SEGU<span>TOOLS</span><small> / UPSCALER</small></a><span class="badge">ESTUDIO DE IMAGEN</span></header>
+<main>
+<section class="intro"><div class="eyebrow">MÁS DETALLE. MÁS POSIBILIDADES.</div><h1>Tus imágenes,<br>en otra <em>resolución.</em></h1><p>Amplía tus fotos y diseños con inteligencia artificial.<br>Sube una imagen, elige el tamaño y descubre el resultado.</p></section>
+<section class="studio" aria-label="Ampliar imagen">
+<div class="workspace">
+<div class="panel-top"><span id="view-label">01 / TU IMAGEN</span><button id="change" class="text-button" hidden>Cambiar imagen</button></div>
+<label class="dropzone" id="dropzone" for="file"><span class="upload-icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M12 16V3m-5 5 5-5 5 5M4 15v6h16v-6"/></svg></span><strong>Todo empieza con una imagen</strong><span>Arrástrala aquí o <u>elige un archivo</u></span><small>JPG, PNG o WebP · hasta 10 MiB · 40 megapíxeles</small></label>
+<input id="file" class="file-input" type="file" accept="image/jpeg,image/png,image/webp">
+<div id="preview" hidden><div class="image-stage"><img id="image" alt="Vista previa de tu imagen"></div><div class="image-info"><span id="filename"></span><span id="filesize"></span></div></div>
+<div id="result-tabs" class="tabs" hidden><button id="original-tab" class="secondary">Original</button><button id="result-tab" class="secondary">Resultado</button><a id="download" target="_blank" rel="noopener noreferrer">Abrir y descargar</a></div>
+</div>
+<aside><div class="eyebrow">02 / ELIGE EL TAMAÑO</div><h2>Un poco más grande.<br>Mucho más detalle.</h2><fieldset><legend class="sr-only">Resolución de salida</legend><label class="resolution"><input type="radio" name="quality" value="4k" checked><span><b>4K</b><small>4096 px</small></span><span class="tag">INICIAL</span></label><label class="resolution"><input type="radio" name="quality" value="6k"><span><b>6K</b><small>6144 px</small></span></label><label class="resolution"><input type="radio" name="quality" value="8k"><span><b>8K</b><small>8192 px</small></span></label></fieldset><p class="hint">Tamaño objetivo del lado mayor. La calidad y las dimensiones finales dependen de la imagen y del procesamiento.</p>
+<label class="access-label" for="access">Clave de acceso al estudio</label><input id="access" type="password" autocomplete="off" placeholder="Tu clave de acceso"><button id="connect" class="text-button">Consultar mis tareas</button>
+<button id="enhance" class="primary" disabled>Ampliar imagen <span aria-hidden="true">+</span></button><p class="hint">Cada ampliación utiliza una ejecución de IA. Revisa tu selección antes de iniciar.</p><div id="status" role="status" aria-live="polite">Comprobando disponibilidad…</div><button id="refresh" class="secondary" hidden>Consultar estado</button>
+</aside></section>
+<section class="details"><div><span>01</span><h3>Conserva tu original</h3><p>Compara la imagen de entrada con el resultado antes de descargarlo.</p></div><div><span>02</span><h3>Procesamiento con IA</h3><p>La mejora puede reinterpretar detalles. Revisa especialmente textos y rostros.</p></div><div><span>03</span><h3>Descarga a tiempo</h3><p>El resultado tiene un enlace temporal. Guarda tu copia cuando esté listo.</p></div></section>
+</main><footer><span>SEGUTOOLS / Herramientas para crear.</span><span>Upscaler · Versión de prueba</span></footer>
+</body></html>
