@@ -1,0 +1,20 @@
+{
+  "addMetadata": false,
+  "nodeInfoList": [
+    {
+      "nodeId": "123",
+      "fieldName": "image",
+      "fieldValue": "REPLACE_WITH_UPLOADED_IMAGE_REFERENCE"
+    },
+    {
+      "nodeId": "142",
+      "fieldName": "scale_by",
+      "fieldValue": "8"
+    },
+    {
+      "nodeId": "172",
+      "fieldName": "condition",
+      "fieldValue": "always"
+    }
+  ]
+}

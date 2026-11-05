@@ -1,0 +1,330 @@
+{
+  "36": {
+    "inputs": {
+      "tile_width": [
+        "111",
+        0
+      ],
+      "tile_height": [
+        "111",
+        1
+      ],
+      "image": [
+        "154",
+        0
+      ]
+    },
+    "class_type": "TTP_Image_Tile_Batch",
+    "_meta": {
+      "title": "TTP_Image_Tile_Batch",
+      "cnr_id": "comfyui_ttp_toolset",
+      "ver": "1.0.5"
+    }
+  },
+  "111": {
+    "inputs": {
+      "width_factor": 2,
+      "height_factor": 2,
+      "overlap_rate": 0.10000000000000002,
+      "image": [
+        "154",
+        0
+      ]
+    },
+    "class_type": "TTP_Tile_image_size",
+    "_meta": {
+      "title": "TTP_Tile_image_size",
+      "cnr_id": "comfyui_ttp_toolset",
+      "ver": "1.0.5"
+    }
+  },
+  "123": {
+    "inputs": {
+      "image": "REPLACE_WITH_UPLOADED_IMAGE_REFERENCE"
+    },
+    "class_type": "LoadImage",
+    "_meta": {
+      "title": "Load Image",
+      "cnr_id": "comfy-core",
+      "ver": "0.3.67"
+    }
+  },
+  "125": {
+    "inputs": {
+      "padding": 64,
+      "tiles": [
+        "144",
+        0
+      ],
+      "positions": [
+        "36",
+        1
+      ],
+      "original_size": [
+        "36",
+        2
+      ],
+      "grid_size": [
+        "36",
+        3
+      ]
+    },
+    "class_type": "TTP_Image_Assy",
+    "_meta": {
+      "title": "TTP_Image_Assy",
+      "cnr_id": "comfyui_ttp_toolset",
+      "ver": "1.0.5"
+    }
+  },
+  "128": {
+    "inputs": {
+      "seed": 923278288,
+      "resolution": 1536,
+      "max_resolution": 0,
+      "batch_size": 1,
+      "uniform_batch_size": false,
+      "color_correction": "wavelet",
+      "temporal_overlap": 0,
+      "prepend_frames": 0,
+      "input_noise_scale": 0,
+      "latent_noise_scale": 0,
+      "offload_device": "cpu",
+      "enable_debug": false,
+      "image": [
+        "143",
+        0
+      ],
+      "dit": [
+        "129",
+        0
+      ],
+      "vae": [
+        "130",
+        0
+      ]
+    },
+    "class_type": "SeedVR2VideoUpscaler",
+    "_meta": {
+      "title": "SeedVR2 Video Upscaler (v2.5.24)",
+      "cnr_id": "seedvr2_videoupscaler",
+      "ver": "2.5.10"
+    }
+  },
+  "129": {
+    "inputs": {
+      "model": "seedvr2_ema_3b_fp16.safetensors",
+      "device": "cuda:0",
+      "blocks_to_swap": 16,
+      "swap_io_components": false,
+      "offload_device": "cpu",
+      "attention_mode": "sdpa"
+    },
+    "class_type": "SeedVR2LoadDiTModel",
+    "_meta": {
+      "title": "SeedVR2 (Down)Load DiT Model",
+      "cnr_id": "seedvr2_videoupscaler",
+      "ver": "2.5.10"
+    }
+  },
+  "130": {
+    "inputs": {
+      "model": "ema_vae_fp16.safetensors",
+      "device": "cuda:0",
+      "encode_tiled": false,
+      "encode_tile_size": 1024,
+      "encode_tile_overlap": 64,
+      "decode_tiled": false,
+      "decode_tile_size": 1024,
+      "decode_tile_overlap": 64,
+      "tile_debug": "false",
+      "offload_device": "none"
+    },
+    "class_type": "SeedVR2LoadVAEModel",
+    "_meta": {
+      "title": "SeedVR2 (Down)Load VAE Model",
+      "cnr_id": "seedvr2_videoupscaler",
+      "ver": "2.5.10"
+    }
+  },
+  "138": {
+    "inputs": {
+      "image": [
+        "36",
+        0
+      ]
+    },
+    "class_type": "GetImageSize+",
+    "_meta": {
+      "title": "🔧 Get Image Size",
+      "cnr_id": "comfyui_essentials",
+      "ver": "1.1.0"
+    }
+  },
+  "142": {
+    "inputs": {
+      "upscale_method": "lanczos",
+      "scale_by": 8,
+      "image": [
+        "170",
+        0
+      ]
+    },
+    "class_type": "ImageScaleBy",
+    "_meta": {
+      "title": "Upscale Image By",
+      "cnr_id": "comfy-core",
+      "ver": "0.3.67"
+    }
+  },
+  "143": {
+    "inputs": {
+      "upscale_method": "lanczos",
+      "scale_by": 0.25,
+      "image": [
+        "36",
+        0
+      ]
+    },
+    "class_type": "ImageScaleBy",
+    "_meta": {
+      "title": "Upscale Image By",
+      "cnr_id": "comfy-core",
+      "ver": "0.3.67"
+    }
+  },
+  "144": {
+    "inputs": {
+      "width": [
+        "138",
+        0
+      ],
+      "height": [
+        "138",
+        1
+      ],
+      "interpolation": "lanczos",
+      "method": "stretch",
+      "condition": "always",
+      "multiple_of": 8,
+      "image": [
+        "128",
+        0
+      ]
+    },
+    "class_type": "ImageResize+",
+    "_meta": {
+      "title": "🔧 Image Resize",
+      "cnr_id": "comfyui_essentials",
+      "ver": "1.1.0"
+    }
+  },
+  "154": {
+    "inputs": {
+      "width": [
+        "155",
+        0
+      ],
+      "height": [
+        "155",
+        1
+      ],
+      "interpolation": "lanczos",
+      "method": "stretch",
+      "condition": "always",
+      "multiple_of": 8,
+      "image": [
+        "123",
+        0
+      ]
+    },
+    "class_type": "ImageResize+",
+    "_meta": {
+      "title": "🔧 Image Resize",
+      "cnr_id": "comfyui_essentials",
+      "ver": "1.1.0"
+    }
+  },
+  "155": {
+    "inputs": {
+      "image": [
+        "142",
+        0
+      ]
+    },
+    "class_type": "GetImageSize+",
+    "_meta": {
+      "title": "🔧 Get Image Size",
+      "cnr_id": "comfyui_essentials",
+      "ver": "1.1.0"
+    }
+  },
+  "161": {
+    "inputs": {
+      "upscale_model": [
+        "162",
+        0
+      ],
+      "image": [
+        "123",
+        0
+      ]
+    },
+    "class_type": "ImageUpscaleWithModel",
+    "_meta": {
+      "title": "Upscale Image (using Model)"
+    }
+  },
+  "162": {
+    "inputs": {
+      "model_name": "4xNomos8kHAT-L_otf.pth"
+    },
+    "class_type": "UpscaleModelLoader",
+    "_meta": {
+      "title": "Load Upscale Model"
+    }
+  },
+  "168": {
+    "inputs": {
+      "filename_prefix": "segutools_8k",
+      "images": [
+        "125",
+        0
+      ]
+    },
+    "class_type": "SaveImage",
+    "_meta": {
+      "title": "Save Image"
+    }
+  },
+  "170": {
+    "inputs": {
+      "enhance": "very sharp",
+      "images": [
+        "172",
+        0
+      ]
+    },
+    "class_type": "LayerFilter: Sharp & Soft",
+    "_meta": {
+      "title": "LayerFilter: Sharp & Soft"
+    }
+  },
+  "172": {
+    "inputs": {
+      "width": 1024,
+      "height": 1024,
+      "interpolation": "lanczos",
+      "method": "keep proportion",
+      "condition": "always",
+      "multiple_of": 0,
+      "image": [
+        "161",
+        0
+      ]
+    },
+    "class_type": "ImageResize+",
+    "_meta": {
+      "title": "🔧 Image Resize"
+    }
+  }
+}

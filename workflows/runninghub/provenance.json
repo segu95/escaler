@@ -1,0 +1,11 @@
+{
+  "source_sha256": "a5d1c274f5bca86a84a7922df32fca7cabfd68a68d242b011b91d2e823a247cb",
+  "source_nodes": 20,
+  "retained_nodes": 18,
+  "removed_nodes": [
+    "159",
+    "173"
+  ],
+  "validation": "JSON, graph references and cycles only; no GPU or API execution",
+  "status": "candidate presets; provider acceptance and output sizes untested"
+}

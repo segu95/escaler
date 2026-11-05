@@ -1,0 +1,15 @@
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+.env
+.env.*
+!.env.example
+*.private.json
+.upscaler-access/
+*.pem
+*.key
+id_ed25519
+id_rsa
+run-output/
+prueba-upscaler-*/
