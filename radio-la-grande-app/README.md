@@ -1,23 +1,45 @@
-# Radio La Grande de Huétamo — Android 17
+# Radio La Grande de Huétamo — Android y panel de control
 
-Proyecto Android Studio + panel PHP para cPanel. No usa Firebase ni MySQL; la configuración se guarda en JSON.
+Proyecto Android Studio con panel administrativo PHP para alojamiento cPanel/Hostinger. No utiliza Firebase ni MySQL: la configuración de la emisora se guarda en un archivo JSON.
 
-## Subir panel a cPanel
-Copia las carpetas `admin/`, `api/`, `storage/` y `uploads/` a `public_html/radio/`. Usa PHP 8+ y HTTPS. Permisos de escritura para `storage/` y `uploads/`: 755 o 775 según el hosting.
+## Componentes
 
-Panel: `https://TU-DOMINIO/radio/admin/`
-Usuario inicial: `admin`
-Contraseña inicial: `RadioAdmin2026!` (cámbiala antes de publicar).
-JSON: `https://TU-DOMINIO/radio/api/config.php`
+- `app/`: aplicación Android.
+- `admin/`: panel web para administrar la identidad visual, streaming, chat y enlaces.
+- `api/`: endpoint JSON que consume la aplicación.
+- `storage/`: configuración persistente de la emisora.
+- `uploads/`: imágenes subidas desde el panel.
 
-## Conectar Android
-Abre `app/src/main/assets/index.html` y configura dentro de `DEFAULTS`:
+## Instalación del panel en Hostinger/cPanel
+
+1. Crea la carpeta `public_html/radio/`.
+2. Sube el contenido de esta carpeta del proyecto (`admin/`, `api/`, `storage/` y `uploads/`) dentro de `public_html/radio/`.
+3. Usa PHP 8 o superior y activa HTTPS.
+4. Comprueba que `storage/` y `uploads/` tengan permisos de escritura para PHP (normalmente 755 o 775, según el hosting).
+5. Abre `https://TU-DOMINIO/radio/admin/`.
+6. Inicia sesión con el usuario y la contraseña entregados junto con este paquete. Cambia la contraseña después del primer acceso.
+
+La API de configuración queda en `https://TU-DOMINIO/radio/api/config.php`.
+
+## Conectar la aplicación Android
+
+Abre `app/src/main/assets/index.html` y sustituye el valor de `apiUrl` dentro de `DEFAULTS`:
+
 ```js
-apiUrl:"https://TU-DOMINIO.com/radio/api/config.php",
+apiUrl: "https://TU-DOMINIO/radio/api/config.php",
 ```
-Reemplaza el dominio por el tuyo.
 
-## Android Studio
-SDK Platform 37, Android Gradle Plugin 9.5.0 y Gradle 9.6. Abre esta carpeta como proyecto y sincroniza. Compila con **Build > Build Bundle(s) / APK(s) > Build APK(s)**.
+Usa tu dominio real con HTTPS.
 
-El panel permite cambiar logo, fondo, colores, nombre, streaming, chat/WhatsApp y gestionar enlaces (agregar, editar, activar/desactivar, ordenar y eliminar). La reproducción actual es en pantalla; no incluye servicio persistente de audio en segundo plano.
+## Abrir en Android Studio
+
+1. Abre la carpeta `radio-la-grande-app` como proyecto.
+2. Deja que Android Studio sincronice Gradle.
+3. Instala el SDK indicado por el proyecto.
+4. Selecciona **Build > Build Bundle(s) / APK(s) > Build APK(s)** para generar el APK.
+
+## Funciones del panel
+
+Permite cambiar nombre de la emisora, textos, colores, logo, fondo, URL de streaming, chat/WhatsApp y administrar enlaces (agregar, editar, activar, desactivar, ordenar y eliminar).
+
+**Nota:** la reproducción actual está integrada en la pantalla de la aplicación; esta versión no incluye un servicio de audio persistente en segundo plano.
