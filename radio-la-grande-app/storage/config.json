@@ -1,0 +1,45 @@
+{
+  "stationName": "La Grande de Huétamo",
+  "brandTop": "LA GRANDE",
+  "brandBottom": "HUÉTAMO",
+  "accent": "#df1020",
+  "textColor": "#ffffff",
+  "streamUrl": "",
+  "logo": "",
+  "background": "",
+  "chatEnabled": true,
+  "chatUrl": "",
+  "chatMessage": "Comunícate con nosotros.",
+  "chatButtonLabel": "Abrir chat",
+  "footer": "Radio La Grande de Huétamo",
+  "links": [
+    {
+      "label": "Facebook",
+      "url": "https://facebook.com/",
+      "icon": "f",
+      "active": true,
+      "wide": false
+    },
+    {
+      "label": "WhatsApp",
+      "url": "https://wa.me/",
+      "icon": "✉",
+      "active": true,
+      "wide": false
+    },
+    {
+      "label": "La Grande de Huétamo",
+      "url": "https://",
+      "icon": "◎",
+      "active": true,
+      "wide": true
+    },
+    {
+      "label": "Ana La Purépecha",
+      "url": "https://",
+      "icon": "◎",
+      "active": true,
+      "wide": true
+    }
+  ]
+}
