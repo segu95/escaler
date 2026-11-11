@@ -1,0 +1,52 @@
+<?php
+session_start(); require __DIR__.'/config.php';
+$root=dirname(__DIR__); $cfg=$root.'/storage/config.json';
+function h($v){return htmlspecialchars((string)$v,ENT_QUOTES,'UTF-8');}
+function readcfg($p){$v=json_decode(@file_get_contents($p)?:'{}',true);return is_array($v)?$v:[];}
+function uploadimg($key,$old,$root){
+ if(empty($_FILES[$key]['tmp_name']))return $old;
+ if($_FILES[$key]['error']!==UPLOAD_ERR_OK||$_FILES[$key]['size']>8388608)throw new Exception('Error de subida o imagen mayor a 8 MB.');
+ $info=getimagesize($_FILES[$key]['tmp_name']);$m=$info['mime']??'';
+ $ext=['image/jpeg'=>'jpg','image/png'=>'png','image/webp'=>'webp'][$m]??null;
+ if(!$ext)throw new Exception('Solo JPG, PNG o WEBP.');
+ $name=$key.'_'.bin2hex(random_bytes(8)).'.'.$ext;
+ if(!move_uploaded_file($_FILES[$key]['tmp_name'],$root.'/uploads/'.$name))throw new Exception('No se pudo guardar la imagen.');
+ return '../uploads/'.$name;
+}
+if(isset($_GET['logout'])){session_destroy();header('Location: index.php');exit;}
+$error='';$ok='';
+if(empty($_SESSION['radio_admin'])){
+ if($_SERVER['REQUEST_METHOD']==='POST'&&($_POST['action']??'')==='login'){
+  if(hash_equals(ADMIN_USER,$_POST['username']??'')&&password_verify($_POST['password']??'',ADMIN_PASSWORD_HASH)){session_regenerate_id(true);$_SESSION['radio_admin']=true;header('Location: index.php');exit;}
+  $error='Usuario o contraseña incorrectos.';
+ }?>
+ <!doctype html><html lang="es"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Acceso administrador</title><style>body{font-family:Arial;background:#101114;color:white;display:grid;place-items:center;min-height:100vh;margin:0}.box{width:min(90%,380px);background:#1c1d22;padding:30px;border-radius:18px}input,button{width:100%;padding:14px;margin:8px 0;border-radius:9px;border:1px solid #444;box-sizing:border-box}button{background:#df1020;color:white;font-weight:bold;border:0}.err{color:#ff9c9c}</style><div class="box"><h2>La Grande de Huétamo</h2><p>Panel de administración</p><?php if($error)echo '<p class="err">'.h($error).'</p>';?><form method="post"><input type="hidden" name="action" value="login"><input name="username" placeholder="Usuario" required><input type="password" name="password" placeholder="Contraseña" required><button>Ingresar</button></form></div></html><?php exit;
+}
+$d=readcfg($cfg);
+if($_SERVER['REQUEST_METHOD']==='POST'&&($_POST['action']??'')==='save'){
+ try{
+  foreach(['stationName','brandTop','brandBottom','footer','streamUrl','chatUrl','chatMessage','chatButtonLabel'] as $k)$d[$k]=trim($_POST[$k]??'');
+  foreach(['accent','textColor'] as $k)$d[$k]=preg_match('/^#[0-9a-fA-F]{6}$/',$_POST[$k]??'')?$_POST[$k]:'#ffffff';
+  $d['chatEnabled']=isset($_POST['chatEnabled']);
+  $d['logo']=uploadimg('logoFile',$d['logo']??'',$root);$d['background']=uploadimg('backgroundFile',$d['background']??'',$root);
+  $d['links']=[];$labels=$_POST['link_label']??[];
+  foreach($labels as $i=>$label){$label=trim($label);if($label==='')continue;$url=trim($_POST['link_url'][$i]??'');if($url!==''&&!preg_match('/^(https?:\\/\\/|mailto:|tel:)/i',$url))throw new Exception('El enlace debe comenzar con https://, http://, mailto: o tel:.');$d['links'][]=['label'=>$label,'url'=>$url,'icon'=>trim($_POST['link_icon'][$i]??'●'),'active'=>isset($_POST['link_active'][$i]),'wide'=>isset($_POST['link_wide'][$i])];}
+  $json=json_encode($d,JSON_PRETTY_PRINT|JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES);
+  if(!$json||file_put_contents($cfg,$json,LOCK_EX)===false)throw new Exception('No se pudo guardar config.json. Revisa permisos de storage.');
+  $ok='Cambios guardados correctamente.';$d=readcfg($cfg);
+ }catch(Throwable $e){$error=$e->getMessage();}
+}
+?>
+<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Panel La Grande</title><style>
+*{box-sizing:border-box}body{margin:0;background:#101114;color:#f4f4f5;font-family:Arial}.top{padding:20px 5%;background:#191a1f;display:flex;justify-content:space-between;gap:12px}.top a{color:#ff858c}.wrap{max-width:980px;margin:25px auto;padding:0 16px}.card{background:#1b1d23;border:1px solid #30323a;border-radius:15px;padding:22px;margin-bottom:18px}h1{font-size:22px;margin:0}h2{font-size:18px;color:#ff7a83;margin:0 0 18px}label{display:block;font-size:13px;color:#c9c9ce;margin:12px 0 6px}input[type=text],input[type=url],input[type=password]{width:100%;padding:12px;border-radius:8px;border:1px solid #454752;background:#111216;color:white}input[type=color]{width:65px;height:40px}input[type=file]{width:100%;padding:10px;background:#111216;color:#ccc}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}.btn{background:#df1020;color:white;border:0;padding:13px 18px;border-radius:9px;font-weight:bold;cursor:pointer}.secondary{background:#343741}.danger{background:#7d242c}.linkrow{padding:15px;background:#131419;border:1px solid #363842;border-radius:10px;margin:12px 0}.checks{display:flex;gap:18px;flex-wrap:wrap;margin-top:12px}.checks label{display:flex;align-items:center;gap:7px;margin:0}.notice{padding:13px;border-radius:9px;margin-bottom:15px;background:#173c2b;color:#a5f0bf}.err{background:#492329;color:#ffc2c7}.muted{color:#a7a7af;font-size:13px;line-height:1.5}.preview{max-width:120px;max-height:90px;object-fit:contain;display:block;margin-top:8px}@media(max-width:600px){.top{flex-direction:column}.card{padding:16px}}
+</style></head><body><header class="top"><h1>🎙 La Grande de Huétamo · Administración</h1><a href="?logout=1">Cerrar sesión</a></header><div class="wrap">
+<?php if($ok)echo '<div class="notice">'.h($ok).'</div>';if($error)echo '<div class="notice err">'.h($error).'</div>';?>
+<form method="post" enctype="multipart/form-data"><input type="hidden" name="action" value="save">
+<section class="card"><h2>Identidad y colores</h2><div class="grid">
+<div><label>Nombre de la radio</label><input name="stationName" value="<?=h($d['stationName']??'')?>"></div><div><label>Texto superior</label><input name="brandTop" value="<?=h($d['brandTop']??'')?>"></div><div><label>Texto inferior</label><input name="brandBottom" value="<?=h($d['brandBottom']??'')?>"></div><div><label>Pie de página</label><input name="footer" value="<?=h($d['footer']??'')?>"></div><div><label>Color principal</label><input type="color" name="accent" value="<?=h($d['accent']??'#df1020')?>"></div><div><label>Color del texto</label><input type="color" name="textColor" value="<?=h($d['textColor']??'#ffffff')?>"></div></div></section>
+<section class="card"><h2>Logo y fondo</h2><div class="grid"><div><label>Subir logo (JPG, PNG, WEBP · 8 MB máx.)</label><input type="file" name="logoFile" accept="image/png,image/jpeg,image/webp"><?php if(!empty($d['logo']))echo '<img class="preview" src="'.h($d['logo']).'">';?></div><div><label>Subir fondo</label><input type="file" name="backgroundFile" accept="image/png,image/jpeg,image/webp"><?php if(!empty($d['background']))echo '<img class="preview" src="'.h($d['background']).'">';?></div></div></section>
+<section class="card"><h2>Radio en vivo</h2><label>URL directa de streaming</label><input type="url" name="streamUrl" value="<?=h($d['streamUrl']??'')?>" placeholder="https://servidor:puerto/stream"></section>
+<section class="card"><h2>Chat y WhatsApp</h2><label class="checks"><input type="checkbox" name="chatEnabled" <?=!empty($d['chatEnabled'])?'checked':''?>> Activar pestaña Chat</label><label>URL del chat o WhatsApp</label><input type="url" name="chatUrl" value="<?=h($d['chatUrl']??'')?>"><label>Mensaje</label><input name="chatMessage" value="<?=h($d['chatMessage']??'')?>"><label>Texto del botón</label><input name="chatButtonLabel" value="<?=h($d['chatButtonLabel']??'Abrir chat')?>"></section>
+<section class="card"><h2>Redes y botones</h2><p class="muted">Agrega, edita, activa, desactiva, elimina y ordena los enlaces.</p><div id="links"><?php foreach(($d['links']??[]) as $i=>$l):?><div class="linkrow"><div class="grid"><div><label>Nombre</label><input name="link_label[]" value="<?=h($l['label']??'')?>"></div><div><label>URL</label><input type="url" name="link_url[]" value="<?=h($l['url']??'')?>"></div><div><label>Icono o símbolo</label><input name="link_icon[]" value="<?=h($l['icon']??'●')?>"></div></div><div class="checks"><label><input type="checkbox" name="link_active[<?=$i?>]" <?=!empty($l['active'])?'checked':''?>> Visible</label><label><input type="checkbox" name="link_wide[<?=$i?>]" <?=!empty($l['wide'])?'checked':''?>> Ancho</label><button type="button" class="btn danger" onclick="this.closest('.linkrow').remove()">Eliminar</button><button type="button" class="btn secondary" onclick="moveRow(this,-1)">↑</button><button type="button" class="btn secondary" onclick="moveRow(this,1)">↓</button></div></div><?php endforeach;?></div><button type="button" class="btn secondary" onclick="addLink()">+ Agregar botón</button></section>
+<div class="card"><button class="btn" type="submit">GUARDAR Y PUBLICAR CAMBIOS</button> <a class="btn secondary" href="../api/config.php" target="_blank">Ver JSON</a></div></form></div>
+<script>let n=1000;function addLink(){let i=n++,d=document.createElement('div');d.className='linkrow';d.innerHTML=`<div class="grid"><div><label>Nombre</label><input name="link_label[]" placeholder="Instagram"></div><div><label>URL</label><input type="url" name="link_url[]" placeholder="https://..."></div><div><label>Icono</label><input name="link_icon[]" value="●"></div></div><div class="checks"><label><input type="checkbox" name="link_active[${i}]" checked> Visible</label><label><input type="checkbox" name="link_wide[${i}]"> Ancho</label><button type="button" class="btn danger" onclick="this.closest('.linkrow').remove()">Eliminar</button><button type="button" class="btn secondary" onclick="moveRow(this,-1)">↑</button><button type="button" class="btn secondary" onclick="moveRow(this,1)">↓</button></div>`;document.getElementById('links').appendChild(d)}function moveRow(b,dir){let r=b.closest('.linkrow'),p=r.parentNode;if(dir<0&&r.previousElementSibling)p.insertBefore(r,r.previousElementSibling);if(dir>0&&r.nextElementSibling)p.insertBefore(r.nextElementSibling,r)}</script></body></html>
